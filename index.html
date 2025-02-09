@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will You Go on a Date With Me?</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Importing new fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:wght@700&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .gradient-background {
+      background: linear-gradient(135deg, rgba(255,182,193,1) 0%, rgba(255,192,203,1) 30%, rgba(255,240,245,1) 100%);
+    }
+
+    .heart-pulse {
+      animation: heartPulse 1.5s infinite;
+    }
+
+    @keyframes heartPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .fade-in {
+      animation: fadeIn 2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .button-glow:hover {
+      box-shadow: 0 0 25px rgba(255, 20, 147, 0.6);
+    }
+
+    .floating-hearts::before {
+      content: '❤';
+      position: absolute;
+      animation: float 8s infinite linear;
+      opacity: 0;
+      font-size: 24px;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+    }
+
+    .date-idea-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.3);
+      max-width: 500px;
+      margin: 2rem auto;
+      display: none;
+      animation: slideIn 1s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Custom font styles */
+    .font-pacifico {
+      font-family: 'Pacifico', cursive;
+    }
+
+    .font-playfair {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .font-quicksand {
+      font-family: 'Quicksand', sans-serif;
+    }
+  </style>
+</head>
+<body class="gradient-background">
+  <!-- Floating hearts container -->
+  <div class="floating-hearts" style="position: fixed; width: 100%; height: 100%; pointer-events: none;"></div>
+
+  <div class="flex flex-col items-center justify-center min-h-screen">
+    <div class="fade-in text-center p-6">
+      <img id="imageDisplay" src="./images/image1.gif" alt="Our date idea" 
+           class="rounded-full shadow-2xl h-[350px] w-[350px] object-cover heart-pulse border-8 border-white/30" />
+      <h2 id="valentineQuestion" class="text-6xl font-bold text-rose-600 mt-8 drop-shadow-lg font-pacifico">
+        Will you go on a date with me? 💖
+      </h2>
+      <p class="text-2xl text-gray-700 mt-4 italic font-playfair">
+        "I can't promise it'll be perfect, but I can promise it'll be memorable."
+      </p>
+      <div class="flex gap-6 mt-12" id="responseButtons">
+        <button id="yesButton"
+          class="transition-all duration-300 hover:scale-110 button-glow 
+                 inline-flex items-center justify-center rounded-full text-2xl 
+                 font-bold bg-gradient-to-r from-rose-500 to-pink-500 text-white 
+                 px-12 py-4 shadow-xl hover:from-rose-600 hover:to-pink-600 font-quicksand">
+          Yes, Let's Go! 🌹
+        </button>
+        <button id="noButton"
+          class="transition-all duration-300 hover:scale-110 button-glow 
+                 inline-flex items-center justify-center rounded-full text-2xl 
+                 font-bold bg-gray-400/90 text-white px-12 py-4 shadow-xl 
+                 hover:bg-gray-500/90 font-quicksand">
+          Maybe... 🤔
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden date idea card -->
+  <div id="dateIdeaCard" class="date-idea-card font-quicksand">
+    <h3 class="text-3xl text-rose-600 mb-4 font-pacifico">Our Perfect Date 💕</h3>
+    <p class="text-lg text-gray-700 mb-4 leading-relaxed">
+      Here's what I have in mind for us:<br>
+      🌸 A cozy dinner at your favorite spot<br>
+      🌙 A moonlit walk in the park<br>
+      🎶 Dancing under the stars<br>
+      🍦 Ending with dessert and sweet conversations<br>
+      What do you think?
+    </p>
+    <p class="text-right text-xl text-rose-600 font-playfair">Can't wait to see you,<br>Your Admirer</p>
+  </div>
+  <!-- <video id="videoPlayer" style="display: none;" controls>
+    <source src="https://www.youtube.com/watch?v=H7jKypzm_aI" type="video/mp4">
+  </video> -->
+
+  <script type="module">
+    import confetti from 'https://cdn.skypack.dev/canvas-confetti';
+    const yesButton = document.getElementById('yesButton');
+    const noButton = document.getElementById('noButton');
+    const imageDisplay = document.getElementById('imageDisplay');
+    const valentineQuestion = document.getElementById('valentineQuestion');
+    const responseButtons = document.getElementById('responseButtons');
+    const dateIdeaCard = document.getElementById('dateIdeaCard');
+
+    // Create floating hearts
+    function createHearts() {
+      const heartsContainer = document.querySelector('.floating-hearts');
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'floating-hearts';
+        heart.style.left = `${Math.random() * 100}%`;
+        heart.style.animationDelay = `${Math.random() * 5}s`;
+        heartsContainer.appendChild(heart);
+      }
+    }
+    createHearts();
+
+    let noClickCount = 0;
+    const playfulResponses = [
+      "Are you sure?",
+      "Think about the fun we'll have!",
+      "What if I promise dessert?",
+      "I'll plan the perfect evening!",
+      "Just one chance? 🥺",
+      "You know you want to! 😉"
+    ];
+
+    const imagePaths = [
+      "./images/image1.gif",
+      "./images/image2.gif",
+      "./images/image3.gif",
+      "./images/image4.gif",
+      "./images/image5.gif",
+      "./images/image6.gif",
+      "./images/image7.gif"
+    ];
+
+    noButton.addEventListener('click', function() {
+      if (noClickCount < 5) {
+        noClickCount++;
+        imageDisplay.src = imagePaths[noClickCount];
+        noButton.textContent = playfulResponses[noClickCount];
+        noButton.style.transform = `translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px)`;
+      } else {
+        noButton.textContent = "Okay, you convinced me! 💘";
+        noButton.disabled = true;
+        setTimeout(() => {
+          
+          responseButtons.style.opacity = '0.5';
+          dateIdeaCard.style.display = 'block';
+          dateIdeaCard.style.animation = 'slideIn 1s ease-out';
+        }, 1000);
+      }
+    });
+
+    yesButton.addEventListener('click', () => {
+      imageDisplay.src = './images/image7.gif';
+      valentineQuestion.innerHTML = "Yay! Let's Make It Unforgettable! 🌟";
+      responseButtons.style.display = 'none';
+      dateIdeaCard.style.display = 'block';
+      dateIdeaCard.style.animation = 'slideIn 1s ease-out';
+
+      // Romantic confetti explosion
+      const count = 300;
+      const defaults = {
+        origin: { y: 0.7 },
+        colors: ["#ff69b4", "#ff1493", "#db7093"],
+        shapes: ['heart']
+      };
+
+      function fire(particleRatio, opts) {
+        confetti(Object.assign({}, defaults, opts, {
+          particleCount: Math.floor(count * particleRatio),
+          shape: 'heart'
+        }));
+      }
+
+      fire(0.25, { spread: 26, startVelocity: 55 });
+      fire(0.2, { spread: 60 });
+      fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+      fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+      fire(0.1, { spread: 120, startVelocity: 45 });
+
+      // Add romantic background music
+      const audio = new Audio('music.mp3');
+      audio.loop = true;
+      audio.play();
+      
+
+    });
+  </script>
+</body>
+</html>
+
+
